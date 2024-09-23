@@ -1,3 +1,7 @@
+mod message;
+
+use message::helper;
+
 mod crypto;
 use crypto::encrypt;
 
