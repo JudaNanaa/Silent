@@ -10,4 +10,9 @@ fn main() {
 	new_user.add_newcontact("Imad", local_ip().unwrap()).unwrap();
 	new_user.add_newcontact("Moha", local_ip().unwrap()).unwrap();
 	println!("{} => {:#?}",new_user.name, new_user);
+
+	new_user.remove_by_name("Moussa").unwrap();
+	println!("\nRemoved Moussa\n");
+
+	println!("{} => {:#?}",new_user.name, new_user);
 }

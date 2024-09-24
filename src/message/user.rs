@@ -352,14 +352,12 @@ use super::{User, UserErr};
 		
 		let content: Vec<&str> = content.split("\n").collect();
 		
-		println!("DBUG: {:#?}", content);
 		for str in content {
 			let infos: Vec<&str> = str.trim().split(':').collect();
 			if infos.iter().any(|str| str.is_empty())
 			|| infos.iter().count() != 4 {
 				continue ;
 			}
-			println!("DBG2: {:?}", infos);
 			if infos[0] != "$" {
 				continue ;
 			}
