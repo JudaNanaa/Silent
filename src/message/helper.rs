@@ -3,7 +3,7 @@ use std::time;
 use chrono::{Date, DateTime, Local, TimeZone};
 
 pub struct Message {
-    message: String,
+    pub message: String,
     send_time: DateTime<Local>,
 }
 
