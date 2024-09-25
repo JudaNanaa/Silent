@@ -1,6 +1,7 @@
 use crate::message::helper::Message;
+use ring::aead::{self, Aad, LessSafeKey, Nonce, UnboundKey, AES_256_GCM, CHACHA20_POLY1305};
 use ring::agreement::{self, UnparsedPublicKey};
-use ring::rand::SystemRandom;
+use ring::rand::{SecureRandom, SystemRandom};
 
 pub struct Keys {
     private: agreement::EphemeralPrivateKey,
@@ -41,5 +42,24 @@ impl Encryptor {
         )
         .unwrap();
         shared_secret
+    }
+    pub fn encrypt_message(&self, shared_secret: &[u8; 32]) -> Vec<u8> {
+        let unbound_key = UnboundKey::new(&CHACHA20_POLY1305, shared_secret).unwrap();
+        let key = LessSafeKey::new(unbound_key);
+
+        let rng = SystemRandom::new();
+        let mut nonce_bytes = [0u8; 12];
+        rng.fill(&mut nonce_bytes).unwrap();
+        let nonce = Nonce::assume_unique_for_key(nonce_bytes);
+
+        let mut messag_bytes = self.message.message.clone();
+        messag_bytes.extend_from_slice(&[0u8; aead::CHACHA20_POLY1305.tag_len()]);
+
+        key.seal_in_place_append_tag(nonce, Aad::empty(), &mut messag_bytes)
+            .unwrap();
+
+        let mut ciphertext = nonce_bytes.to_vec();
+        ciphertext.extend_from_slice(&messag_bytes);
+        ciphertext
     }
 }
