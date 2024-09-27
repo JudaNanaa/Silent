@@ -6,6 +6,6 @@ edition = "2021"
 [dependencies]
 chrono = "0.4"
 libp2p = { version = "0.54.1", features = ["noise", "tokio", "macros", "tcp", "tls", "yamux"] }
-
-
+tokio = { version = "1", features = ["full"] }
+colored = "2.0"
 
